@@ -157,11 +157,11 @@ pub fn new_partial(
 		config,
 	)?;
 
-	let frontier_block_import = FrontierBlockImport::new(
-		grandpa_block_import.clone(),
-		client.clone(),
-		frontier_backend.clone(),
-	);
+	// let frontier_block_import = FrontierBlockImport::new(
+	// 	grandpa_block_import.clone(),
+	// 	client.clone(),
+	// 	frontier_backend.clone(),
+	// );
 
 	let fee_history_limit: u64 = 2048;
 	let fee_history_cache: FeeHistoryCache = Arc::new(Mutex::new(BTreeMap::new()));

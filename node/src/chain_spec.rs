@@ -2,13 +2,12 @@ use hex_literal::hex;
 use sc_service::{ChainType, Properties};
 use sp_consensus_aura::sr25519::AuthorityId as AuraId;
 use sp_core::{Pair, Public, H160, U256};
-use sp_finality_grandpa::AuthorityId as GrandpaId;
 // use sp_runtime::key_types::IM_ONLINE;
 use pallet_im_online::sr25519::AuthorityId as ImOnlineId;
 
 use storage_chain_runtime::{
 	currency::*, opaque::SessionKeys, AccountId, AuraConfig, Balance, BalancesConfig,
-	CouncilConfig, DemocracyConfig, EVMConfig, GenesisAccount, GenesisConfig, GrandpaConfig,
+	CouncilConfig, DemocracyConfig, EVMConfig, GenesisAccount, GenesisConfig, 
 	ImOnlineConfig, SessionConfig, SudoConfig, SystemConfig, TechnicalCommitteeConfig,
 	ValidatorSetConfig, WASM_BINARY, Treasury,
 };
@@ -59,25 +58,21 @@ pub fn public_config() -> Result<ChainSpec, String> {
 					(
 						array_bytes::hex_n_into_unchecked(ALITH),
 						get_from_secret::<AuraId>("//Alice"),
-						get_from_secret::<GrandpaId>("//Alice"),
 						get_from_secret::<ImOnlineId>("//Alice"),
 					),
 					(
 						array_bytes::hex_n_into_unchecked(BALTATHAR),
 						get_from_secret::<AuraId>("//Bob"),
-						get_from_secret::<GrandpaId>("//Bob"),
 						get_from_secret::<ImOnlineId>("//Bob"),
 					),
 					(
 						array_bytes::hex_n_into_unchecked(CHARLETH),
 						get_from_secret::<AuraId>("//Charlie"),
-						get_from_secret::<GrandpaId>("//Charlie"),
 						get_from_secret::<ImOnlineId>("//Charlie"),
 					),
 					(
 						array_bytes::hex_n_into_unchecked(DOROTHY),
 						get_from_secret::<AuraId>("//Dave"),
-						get_from_secret::<GrandpaId>("//Dave"),
 						get_from_secret::<ImOnlineId>("//Dave"),
 					),
 				],
@@ -102,8 +97,8 @@ pub fn public_config() -> Result<ChainSpec, String> {
 	))
 }
 
-fn session_keys(aura: AuraId, grandpa: GrandpaId, im_online: ImOnlineId) -> SessionKeys {
-	SessionKeys { aura, grandpa, im_online }
+fn session_keys(aura: AuraId,  im_online: ImOnlineId) -> SessionKeys {
+	SessionKeys { aura, im_online }
 }
 
 pub fn chainspec_properties() -> Properties {
@@ -129,7 +124,6 @@ pub fn development_config() -> Result<ChainSpec, String> {
 				vec![(
 					array_bytes::hex_n_into_unchecked(ALITH),
 					get_from_secret::<AuraId>("//Alice"),
-					get_from_secret::<GrandpaId>("//Alice"),
 					get_from_secret::<ImOnlineId>("//Alice"),
 				)],
 				// Sudo account
@@ -176,25 +170,21 @@ pub fn local_testnet_config() -> Result<ChainSpec, String> {
 					(
 						array_bytes::hex_n_into_unchecked(ALITH),
 						get_from_secret::<AuraId>("//Alice"),
-						get_from_secret::<GrandpaId>("//Alice"),
 						get_from_secret::<ImOnlineId>("//Alice"),
 					),
 					(
 						array_bytes::hex_n_into_unchecked(BALTATHAR),
 						get_from_secret::<AuraId>("//Bob"),
-						get_from_secret::<GrandpaId>("//Bob"),
 						get_from_secret::<ImOnlineId>("//Bob"),
 					),
 					(
 						array_bytes::hex_n_into_unchecked(CHARLETH),
 						get_from_secret::<AuraId>("//Charlie"),
-						get_from_secret::<GrandpaId>("//Charlie"),
 						get_from_secret::<ImOnlineId>("//Charlie"),
 					),
 					(
 						array_bytes::hex_n_into_unchecked(DOROTHY),
 						get_from_secret::<AuraId>("//Dave"),
-						get_from_secret::<GrandpaId>("//Dave"),
 						get_from_secret::<ImOnlineId>("//Dave"),
 					),
 				],
@@ -227,7 +217,7 @@ pub fn local_testnet_config() -> Result<ChainSpec, String> {
 /// Configure initial storage state for FRAME modules.
 fn testnet_genesis(
 	wasm_binary: &[u8],
-	initial_authorities: Vec<(AccountId, AuraId, GrandpaId, ImOnlineId)>,
+	initial_authorities: Vec<(AccountId, AuraId, ImOnlineId)>,
 	root_key: AccountId,
 	endowed_accounts: Vec<AccountId>,
 	_enable_println: bool,
@@ -280,10 +270,6 @@ fn testnet_genesis(
 
 			authorities: vec![],
 		},
-		grandpa: GrandpaConfig {
-
-			authorities: vec![],
-		},
 		sudo: SudoConfig {
 			// Assign network admin rights.
 			key: Some(root_key),
@@ -297,11 +283,11 @@ fn testnet_genesis(
 		session: SessionConfig {
 			keys: initial_authorities
 				.into_iter()
-				.map(|(acc, aura, gran, im_online)| {	
+				.map(|(acc, aura, im_online)| {	
 					(
 						acc.clone(), acc,
 						session_keys(
-							aura, gran, im_online,
+							aura, im_online,
 						),
 					
 					)
@@ -317,7 +303,7 @@ fn testnet_genesis(
 
 fn mainnet_genesis(
 	wasm_binary: &[u8],
-	initial_authorities: Vec<(AccountId, AuraId, GrandpaId, ImOnlineId)>,
+	initial_authorities: Vec<(AccountId, AuraId, ImOnlineId)>,
 	root_key: AccountId,
 	endowed_accounts: Vec<AccountId>,
 	_enable_println: bool,
@@ -361,9 +347,6 @@ fn mainnet_genesis(
 		aura: AuraConfig {
 			authorities: vec![],
 		},
-		grandpa: GrandpaConfig {
-			authorities: vec![],	
-		},
 		sudo: SudoConfig {
 			// Assign network admin rights.
 			key: Some(root_key),
@@ -393,7 +376,7 @@ fn mainnet_genesis(
 					(
 						x.0.clone(), 
 						x.0.clone(), 
-						session_keys(x.1.clone(), x.2.clone(), x.3.clone()))
+						session_keys(x.1.clone(), x.2.clone()))
 				})
 				.collect::<Vec<_>>(),
 		},

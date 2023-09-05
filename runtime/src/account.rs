@@ -63,13 +63,13 @@ impl From<H160> for AccountId20 {
 		Self(h160.0)
 	}
 }   
-
+ 
 impl Into<H160> for AccountId20 {
 	fn into(self) -> H160 {
 		H160(self.0)
 	}
 } 
-
+  
 #[cfg(feature = "std")]
 impl std::str::FromStr for AccountId20 {
 	type Err = &'static str;
@@ -79,7 +79,7 @@ impl std::str::FromStr for AccountId20 {
 			.map_err(|_| "invalid hex address.")
 	}
 }
-
+ 
 #[cfg_attr(feature = "std", derive(serde::Serialize, serde::Deserialize))]
 #[derive(Eq, PartialEq, Clone, Encode, Decode, sp_core::RuntimeDebug, TypeInfo)]
 pub struct EthereumSignature(ecdsa::Signature);

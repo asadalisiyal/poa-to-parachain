@@ -13,9 +13,9 @@ include!(concat!(env!("OUT_DIR"), "/wasm_binary.rs"));
 use pallet_session::SessionManager;
 
 
-use pallet_grandpa::{
-	fg_primitives, AuthorityId as GrandpaId, AuthorityList as GrandpaAuthorityList,
-};
+// use pallet_grandpa::{
+// 	fg_primitives, AuthorityId as GrandpaId, AuthorityList as GrandpaAuthorityList,
+// };
 
 // vvv
 use frame_system::EnsureRoot;
@@ -30,7 +30,7 @@ use crate::currency::*;
 use sp_runtime::{
 	create_runtime_str, generic, impl_opaque_keys, generic::Era, 
 	traits::{
-		BlakeTwo256, Block as BlockT, NumberFor, One,
+		BlakeTwo256, Block as BlockT, One,
 		Dispatchable, PostDispatchInfoOf, DispatchInfoOf, UniqueSaturatedInto, OpaqueKeys, 
 		Verify 
 	},
@@ -148,7 +148,7 @@ pub mod opaque {
 	impl_opaque_keys! {
 		pub struct SessionKeys {
 			pub aura: Aura,
-			pub grandpa: Grandpa,
+			// pub grandpa: Grandpa,
 			pub im_online: ImOnline,
 		}
 	}
@@ -301,25 +301,25 @@ impl pallet_aura::Config for Runtime {
 	type DisabledValidators = ();
 }
 
-impl pallet_grandpa::Config for Runtime {
-	type RuntimeEvent = RuntimeEvent;
+// impl pallet_grandpa::Config for Runtime {
+// 	type RuntimeEvent = RuntimeEvent;
 
-	type KeyOwnerProof =
-	<Self::KeyOwnerProofSystem as KeyOwnerProofSystem<(KeyTypeId, GrandpaId)>>::Proof;
+// 	type KeyOwnerProof =
+// 	<Self::KeyOwnerProofSystem as KeyOwnerProofSystem<(KeyTypeId, GrandpaId)>>::Proof;
 
-	type KeyOwnerIdentification = <Self::KeyOwnerProofSystem as KeyOwnerProofSystem<(
-		KeyTypeId,
-		GrandpaId,
-	)>>::IdentificationTuple;
+// 	type KeyOwnerIdentification = <Self::KeyOwnerProofSystem as KeyOwnerProofSystem<(
+// 		KeyTypeId,
+// 		GrandpaId,
+// 	)>>::IdentificationTuple;
 
-	type KeyOwnerProofSystem = ();
+// 	type KeyOwnerProofSystem = ();
 
-	type HandleEquivocation = ();
+// 	type HandleEquivocation = ();
 
-	type WeightInfo = ();
-	type MaxAuthorities = ConstU32<32>;
+// 	type WeightInfo = ();
+// 	type MaxAuthorities = ConstU32<32>;
 
-}
+// }
  
 impl pallet_timestamp::Config for Runtime {
 	/// A timestamp: milliseconds since the unix epoch.
@@ -844,7 +844,7 @@ construct_runtime!(
 		Authorship: pallet_authorship,
 		Session: pallet_session,
 		Aura: pallet_aura,
-		Grandpa: pallet_grandpa,
+		// Grandpa: pallet_grandpa,
 
 		Sudo: pallet_sudo,
 
@@ -1249,35 +1249,35 @@ impl_runtime_apis! {
 		}
 	}
 
-	impl fg_primitives::GrandpaApi<Block> for Runtime {
-		fn grandpa_authorities() -> GrandpaAuthorityList {
-			Grandpa::grandpa_authorities()
-		}
+	// impl fg_primitives::GrandpaApi<Block> for Runtime {
+	// 	fn grandpa_authorities() -> GrandpaAuthorityList {
+	// 		Grandpa::grandpa_authorities()
+	// 	}
 
-		fn current_set_id() -> fg_primitives::SetId {
-			Grandpa::current_set_id()
-		}
+	// 	fn current_set_id() -> fg_primitives::SetId {
+	// 		Grandpa::current_set_id()
+	// 	}
 
-		fn submit_report_equivocation_unsigned_extrinsic(
-			_equivocation_proof: fg_primitives::EquivocationProof<
-				<Block as BlockT>::Hash,
-				NumberFor<Block>,
-			>,
-			_key_owner_proof: fg_primitives::OpaqueKeyOwnershipProof,
-		) -> Option<()> {
-			None
-		}
+	// 	fn submit_report_equivocation_unsigned_extrinsic(
+	// 		_equivocation_proof: fg_primitives::EquivocationProof<
+	// 			<Block as BlockT>::Hash,
+	// 			NumberFor<Block>,
+	// 		>,
+	// 		_key_owner_proof: fg_primitives::OpaqueKeyOwnershipProof,
+	// 	) -> Option<()> {
+	// 		None
+	// 	}
 
-		fn generate_key_ownership_proof(
-			_set_id: fg_primitives::SetId,
-			_authority_id: GrandpaId,
-		) -> Option<fg_primitives::OpaqueKeyOwnershipProof> {
-			// NOTE: this is the only implementation possible since we've
-			// defined our key owner proof type as a bottom type (i.e. a type
-			// with no values).
-			None
-		}
-	}
+	// 	fn generate_key_ownership_proof(
+	// 		_set_id: fg_primitives::SetId,
+	// 		_authority_id: GrandpaId,
+	// 	) -> Option<fg_primitives::OpaqueKeyOwnershipProof> {
+	// 		// NOTE: this is the only implementation possible since we've
+	// 		// defined our key owner proof type as a bottom type (i.e. a type
+	// 		// with no values).
+	// 		None
+	// 	}
+	// }
 
 	impl frame_system_rpc_runtime_api::AccountNonceApi<Block, AccountId, Index> for Runtime {
 		fn account_nonce(account: AccountId) -> Index {
