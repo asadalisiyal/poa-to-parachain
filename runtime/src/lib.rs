@@ -878,6 +878,22 @@ impl fp_rpc::ConvertTransaction<UncheckedExtrinsic> for TransactionConverter {
 	}
 }
 
+// parameter_types! {
+// 	pub const ParaDeposit: Balance = 5 * DOLLARS;
+// 	pub const DataDepositPerByte: Balance = deposit(0, 1);
+// }
+
+// impl paras_registrar::Config for Runtime {
+// 	type RuntimeEvent = RuntimeEvent;
+// 	type RuntimeOrigin = RuntimeOrigin;
+// 	type Currency = Balances;
+// 	type OnSwap = (Crowdloan, Slots);
+// 	type ParaDeposit = ParaDeposit;
+// 	type DataDepositPerByte = DataDepositPerByte;
+// 	type WeightInfo = weights::runtime_common_paras_registrar::WeightInfo<Runtime>;
+// }
+
+
 impl fp_rpc::ConvertTransaction<opaque::UncheckedExtrinsic> for TransactionConverter {
 	fn convert_transaction(
 		&self,
