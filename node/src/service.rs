@@ -157,11 +157,11 @@ pub fn new_partial(
 		config,
 	)?;
 
-	// let frontier_block_import = FrontierBlockImport::new(
-	// 	grandpa_block_import.clone(),
-	// 	client.clone(),
-	// 	frontier_backend.clone(),
-	// );
+	let frontier_block_import = FrontierBlockImport::new(
+		grandpa_block_import.clone(),
+		client.clone(),
+		frontier_backend.clone(),
+	);
 
 	let fee_history_limit: u64 = 2048;
 	let fee_history_cache: FeeHistoryCache = Arc::new(Mutex::new(BTreeMap::new()));
@@ -358,7 +358,7 @@ pub fn new_full(mut config: Configuration) -> Result<TaskManager, ServiceError> 
 				proposer_factory,
 				create_inherent_data_providers: move |_, ()| async move {
 					let timestamp = sp_timestamp::InherentDataProvider::from_system_time();
-
+ 
 					let slot =
 						sp_consensus_aura::inherents::InherentDataProvider::from_timestamp_and_slot_duration(
 							*timestamp,

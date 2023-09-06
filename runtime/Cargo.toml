@@ -19,8 +19,7 @@ impl-serde = { workspace = true }
 libsecp256k1 = { workspace = true, features = [ "hmac" ] }
 log = "0.4.17"
 serde = "1.0.151"
-
-
+smallvec = "1.10.0"
 
 
 
@@ -48,6 +47,11 @@ cumulus-primitives-timestamp = { workspace = true }
 cumulus-primitives-utility = { workspace = true }
 pallet-collator-selection = { workspace = true }
 parachain-info = { workspace = true }
+
+# para-chain
+xcm-primitives = { workspace = true }
+pallet-ethereum-xcm = { workspace = true }
+
 
 
 pallet-preimage = { workspace = true }
@@ -157,6 +161,7 @@ std = [
 	"pallet-base-fee/std",
 	"pallet-evm/std",
 	"pallet-ethereum/std",
+	"pallet-ethereum-xcm/std",
 	# "pallet-grandpa/std",
 	"pallet-randomness-collective-flip/std",
 	"pallet-sudo/std",

@@ -64,6 +64,9 @@ cumulus-primitives-utility = { git = "https://github.com/paritytech/cumulus.git"
 pallet-collator-selection = { git = "https://github.com/paritytech/cumulus.git", branch = "polkadot-v0.9.37", default-features = false }
 parachain-info = { git = "https://github.com/paritytech/cumulus.git", branch = "polkadot-v0.9.37", default-features = false }
 
+xcm-primitives       = { git = "https://github.com/darwinia-network/moonbeam", branch = "update-0.9.38", default-features = false }
+pallet-ethereum-xcm  = { git = "https://github.com/darwinia-network/moonbeam", branch = "update-0.9.38", default-features = false }
+
 
 
 pallet-preimage = { version = "4.0.0-dev", default-features = false, git = "https://github.com/paritytech/substrate.git", branch = "polkadot-v0.9.37" }
