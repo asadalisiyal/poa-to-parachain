@@ -109,7 +109,7 @@ pallet-base-fee = { workspace = true }
 
 
 [build-dependencies]
-substrate-wasm-builder = {  git = "https://github.com/paritytech/substrate.git", branch = "polkadot-v0.9.37" }
+substrate-wasm-builder = {  git = "https://github.com/paritytech/substrate.git", branch = "polkadot-v0.9.38" }
 
 [features]
 default = ["std"]
@@ -259,7 +259,7 @@ try-runtime = [
 default-features = false
 package = 'substrate-validator-set'
 git = 'https://github.com/gautamdhameja/substrate-validator-set.git'
-tag = 'polkadot-v0.9.37'
+tag = 'polkadot-v0.9.38'
 
 
 
@@ -267,4 +267,4 @@ tag = 'polkadot-v0.9.37'
 [dependencies.pallet-im-online]
 default-features = false
 git = 'https://github.com/paritytech/substrate.git'
-branch = 'polkadot-v0.9.37'
+branch = 'polkadot-v0.9.38'

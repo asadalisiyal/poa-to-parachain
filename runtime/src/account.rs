@@ -91,6 +91,7 @@ impl From<ecdsa::Signature> for EthereumSignature {
 }
 
 impl sp_runtime::traits::Verify for EthereumSignature {
+	
 	type Signer = EthereumSigner;
 	fn verify<L: sp_runtime::traits::Lazy<[u8]>>(&self, mut msg: L, signer: &AccountId20) -> bool {
 		let mut m = [0u8; 32];
@@ -114,6 +115,7 @@ impl sp_runtime::traits::Verify for EthereumSignature {
 			}
 		}
 	}
+
 }
 
 /// Public key for an Ethereum / Moonbeam compatible account

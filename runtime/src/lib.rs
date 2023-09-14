@@ -79,7 +79,6 @@ pub use frame_support::{
 	StorageValue,
 };
 pub use frame_system::Call as SystemCall;
-use frame_system::EnsureRoot;
 pub use pallet_balances::Call as BalancesCall;
 pub use pallet_timestamp::Call as TimestampCall;
 use pallet_transaction_payment::{ConstFeeMultiplier, CurrencyAdapter, Multiplier};
@@ -642,18 +641,9 @@ impl pallet_im_online::Config for Runtime {
 
 impl pallet_authorship::Config for Runtime {
 	type FindAuthor = pallet_session::FindAccountFromAuthorIndex<Self, Aura>;
-	type UncleGenerations = UncleGenerations;
-	type FilterUncle = ();
 	type EventHandler = ();
 }
 
-
-// impl pallet_authorship::Config for Runtime {
-//     type FindAuthor = pallet_session::FindAccountFromAuthorIndex<Self, Aura>;
-//     type UncleGenerations = UncleGenerations;
-//     type FilterUncle = ();
-//     type EventHandler = (CollatorSelection,);
-// }
 
 
 parameter_types! {
@@ -676,31 +666,6 @@ parameter_types! {
 	pub const MaxPeerDataEncodingSize: u32 = 1_000;
 }
 
-impl pallet_treasury::Config for Runtime {
-	type SpendOrigin = frame_support::traits::NeverEnsureOrigin<u128>;
-	type PalletId = TreasuryPalletId;
-	type Currency = Balances;
-	type ApproveOrigin = EitherOfDiverse<
-		EnsureRoot<AccountId>,
-		pallet_collective::EnsureProportionAtLeast<AccountId, CouncilCollective, 3, 5>,
-	>;
-	type RejectOrigin = EitherOfDiverse<
-		EnsureRoot<AccountId>,
-		pallet_collective::EnsureProportionMoreThan<AccountId, CouncilCollective, 1, 2>,
-	>;
-	type RuntimeEvent = RuntimeEvent;
-	type OnSlash = ();
-	type ProposalBond = ProposalBond;
-	type ProposalBondMinimum = ProposalBondMinimum;
-	type ProposalBondMaximum = ();
-	type SpendPeriod = SpendPeriod;
-	type Burn = Burn;
-	type BurnDestination = ();
-	type SpendFunds = ();
-	type WeightInfo = pallet_treasury::weights::SubstrateWeight<Runtime>;
-	type MaxApprovals = MaxApprovals;
-	
-}
 
 parameter_types! {
 	pub const CouncilMotionDuration: BlockNumber = 5 * DAYS;
@@ -877,14 +842,6 @@ impl cumulus_pallet_dmp_queue::Config for Runtime {
 	type ExecuteOverweightOrigin = EnsureRoot<AccountId>;
 }
 
-parameter_types! {
-	pub const TreasuryPalletId: frame_support::PalletId = frame_support::PalletId(*b"da/trsry");
-	pub const ProposalBond: sp_runtime::Permill = sp_runtime::Permill::from_percent(5);
-	pub const Burn: sp_runtime::Permill = sp_runtime::Permill::from_percent(5);
-	pub const ProposalBondMinimum: Balance = 1 * currency::STOR;
-	pub const SpendPeriod: BlockNumber = 10 * DAYS;
-	pub const MaxApprovals: u32 = 100;
-}
 
 // In order to use `Tips`, which bounded by `pallet_treasury::Config` rather
 // `pallet_treasury::Config<I>` Still use `DefaultInstance` here instead `Instance1`
@@ -989,10 +946,7 @@ construct_runtime!(
 		Aura: pallet_aura,
 		// Grandpa: pallet_grandpa,
 
-		Sudo: pallet_sudo,
-
-		Treasury: pallet_treasury,
-
+		Sudo: pallet_sudo, 
 		// XCM helpers.
 		XcmpQueue: cumulus_pallet_xcmp_queue,
 		PolkadotXcm: pallet_xcm,
@@ -1170,6 +1124,12 @@ impl fp_self_contained::SelfContainedCall for RuntimeCall {
 }
 
 impl_runtime_apis! {
+
+	impl cumulus_primitives_core::CollectCollationInfo<Block> for Runtime {
+		fn collect_collation_info(header: &<Block as sp_runtime::traits::Block>::Header) -> cumulus_primitives_core::CollationInfo {
+			ParachainSystem::collect_collation_info(header)
+		}
+	}
 
 	impl fp_rpc::EthereumRuntimeRPCApi<Block> for Runtime {
 
@@ -1450,6 +1410,13 @@ impl_runtime_apis! {
 		) -> pallet_transaction_payment::FeeDetails<Balance> {
 			TransactionPayment::query_fee_details(uxt, len)
 		}
+
+		fn query_weight_to_fee(weight: frame_support::weights::Weight) -> Balance {
+			TransactionPayment::weight_to_fee(weight)
+		}
+		fn query_length_to_fee(length: u32) -> Balance {
+			TransactionPayment::length_to_fee(length)
+		}
 	}
 
 	impl pallet_transaction_payment_rpc_runtime_api::TransactionPaymentCallApi<Block, Balance, RuntimeCall>
@@ -1467,6 +1434,13 @@ impl_runtime_apis! {
 		) -> pallet_transaction_payment::FeeDetails<Balance> {
 			TransactionPayment::query_call_fee_details(call, len)
 		}
+		fn query_weight_to_fee(weight: frame_support::weights::Weight) -> Balance {
+			TransactionPayment::weight_to_fee(weight)
+		}
+		fn query_length_to_fee(length: u32) -> Balance {
+			TransactionPayment::length_to_fee(length)
+		}
+
 	}
 
 	#[cfg(feature = "runtime-benchmarks")]

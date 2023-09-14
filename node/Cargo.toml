@@ -82,7 +82,7 @@ fc-db = { workspace = true }
 sc-network = { workspace = true }
 
 [build-dependencies]
-substrate-build-script-utils = { git = "https://github.com/paritytech/substrate.git", branch = "polkadot-v0.9.37" }
+substrate-build-script-utils = { git = "https://github.com/paritytech/substrate.git", branch = "polkadot-v0.9.38" }
 
 [features]
 default = []
@@ -99,4 +99,4 @@ try-runtime = ["storage-chain-runtime/try-runtime", "try-runtime-cli"]
 [dependencies.pallet-im-online]
 default-features = false
 git = 'https://github.com/paritytech/substrate.git'
-branch = 'polkadot-v0.9.37'
+branch = 'polkadot-v0.9.38'

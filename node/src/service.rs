@@ -14,6 +14,7 @@ use fc_mapping_sync::{MappingSyncWorker, SyncStrategy};
 use fc_rpc_core::types::{FeeHistoryCache, FeeHistoryCacheLimit};
 use fc_consensus::FrontierBlockImport;
 use futures::StreamExt;
+use cumulus_primitives_core::ParaId;
 
 // Our native executor instance.
 pub struct ExecutorDispatch;

@@ -1,7 +1,10 @@
+use clap::Id;
 use hex_literal::hex;
 use sc_service::{ChainType, Properties};
 use sp_consensus_aura::sr25519::AuthorityId as AuraId;
 use sp_core::{Pair, Public, H160, U256};
+use cumulus_primitives_core::ParaId;
+
 // use sp_runtime::key_types::IM_ONLINE;
 use pallet_im_online::sr25519::AuthorityId as ImOnlineId;
 
@@ -221,6 +224,7 @@ fn testnet_genesis(
 	root_key: AccountId,
 	endowed_accounts: Vec<AccountId>,
 	_enable_println: bool,
+	id : ParaId
 ) -> GenesisConfig {
 	let num_endowed_accounts = endowed_accounts.len();
 	GenesisConfig {
@@ -248,6 +252,10 @@ fn testnet_genesis(
 				.collect(),
 		},
 
+		parachain_info: ParachainInfoConfig { parachain_id: id },
+
+		parachain_system: Default::default(),
+
 		validator_set: ValidatorSetConfig {
 			initial_validators: initial_authorities.iter().map(|x| x.0.clone()).collect::<Vec<_>>(),
 		},
@@ -270,6 +278,13 @@ fn testnet_genesis(
 
 			authorities: vec![],
 		},
+
+		aura_ext: Default::default(),
+		
+	
+
+
+
 		sudo: SudoConfig {
 			// Assign network admin rights.
 			key: Some(root_key),
@@ -294,7 +309,7 @@ fn testnet_genesis(
 				})
 				.collect::<Vec<_>>(),
 		},
-
+ 
 		ethereum: Default::default(),
 		base_fee: Default::default(),
 		
